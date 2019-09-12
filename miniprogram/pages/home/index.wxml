@@ -1,0 +1,21 @@
+<!-- index.wxml -->
+<view class="container">
+  <view class="welcome">
+    欢迎来到源石财富，在这里你可以了解到车辆日常保养维修必备的小知识，不仅可以为您带来经济上的节省，还可以延长您的爱车使用寿命。帖子除了维修保养相关内容，还有最新政策和网友们遇到的车辆相关烦心事。最后，欢迎来稿，欢迎商业合作和广告入驻。
+  </view>
+  <view class="content">
+    <view class="section" wx:for="{{listP}}" wx:key="{{index}}" bindtap="godetail" data-info="{{item}}">
+      <view class="text">
+        <text class="des-title">{{item.title}}</text>
+        <text class="des-des">{{item.des}}</text>
+      </view>
+      <view class="des-img" wx:if="{{item.imgsrc}}">
+        <image src="{{item.imgsrc}}" />
+      </view>
+    </view>
+  </view>
+  <view class="advert">
+    <view class="txt">欢迎合作或广告入驻，咨询电话</view>
+    <view class="tel" bindtap="callme">18101380205</view>
+  </view>
+</view>
