@@ -1,0 +1,97 @@
+<style lang="less">
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.container {
+  padding-bottom: 100rpx;
+}
+.title {
+  font-size: 44rpx;
+  padding: 10rpx;
+}
+
+.content {
+  padding: 10rpx 30rpx;
+}
+
+.des-p {
+  font-size: 30rpx;
+  color: #333;
+  padding-top: 30rpx;
+  letter-spacing: 4rpx;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.des-img {
+  width: 690rpx;
+}
+
+.des-img image {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 10rpx;
+  padding: 10rpx;
+}
+</style>
+
+<template>
+    <view class="container">
+        <view class="title">{{title}}</view>
+        <view class="content">
+            <view class="section" wx:for="{{listP}}" wx:key="{{index}}">
+                <view class="des-p">{{item.des}}</view>
+                <view class="des-img" wx:if="{{item.img}}">
+                    <img src="{{item.img}}"/>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from '@wepy/core';
+
+wepy.page({
+  data: {
+    listP: '',
+    title: ''
+  },
+  onLoad(params) {
+    this.getDetailInfo(params.articleid);
+  },
+
+  computed: {},
+
+  methods: {
+    getDetailInfo(articleid) {
+      const db = wx.cloud.database({
+        env: 'production-594426'
+      });
+      const listCollection = db.collection('yunhanshi1_articledetail');
+      listCollection
+        .where({ articleid })
+        .get()
+        .then(
+          res => {
+            let info = res.data[0];
+            let { title } = info;
+            let listP = JSON.parse(info.listP);
+            this.listP = listP;
+            this.title = title;
+          },
+          err => {
+            console.log('err', err);
+          }
+        );
+    }
+  },
+
+  created() {}
+});
+</script>
+<config>
+{}
+</config>

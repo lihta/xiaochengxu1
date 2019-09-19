@@ -1,0 +1,158 @@
+<style lang="less">
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.container {
+  padding-bottom: 100rpx;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.content {
+  padding: 20rpx 30rpx;
+}
+
+.content .section {
+  height: 200rpx;
+  display: flex;
+  margin-bottom: 50rpx;
+  background: #b4e1e4;
+  padding: 10rpx 10rpx 10rpx 30rpx;
+}
+
+.content .section .text {
+  width: 490rpx;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+
+.content .section .des-title {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+  padding-top: 20rpx;
+  letter-spacing: 4rpx;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.content .section .des-des {
+  font-size: 24rpx;
+  color: #555;
+  padding-top: 20rpx;
+  padding-right: 20rpx;
+  letter-spacing: 4rpx;
+  line-height: 1.2;
+  text-align: justify;
+}
+
+.content .section .des-img {
+  width: 200rpx;
+  height: 200rpx;
+}
+.content .section .des-img image {
+  width: 200rpx;
+  height: 200rpx;
+
+  padding: 0;
+  margin: 0;
+}
+.divide {
+  width: 690rpx;
+  margin: auto;
+  .tit {
+    text-align: center;
+  }
+  .img {
+    width: 100%;
+    height: 50rpx;
+  }
+}
+</style>
+
+<template>
+  <div class="container">
+    <div class="divide">
+      <div class="tit">- 热门话题 -</div>
+      <img src="{{divide}}" class="img">
+    </div>
+    <div class="content">
+      <div
+        class="section"
+        wx:for="{{listP}}"
+        wx:key="{{index}}"
+        bindtap="godetail"
+        data-info="{{item}}"
+      >
+        <div class="text">
+          <text class="des-title">{{item.title}}</text>
+          <text class="des-des">{{item.des}}</text>
+        </div>
+        <div class="des-img" wx:if="{{item.imgsrc}}">
+          <img src="{{item.imgsrc}}"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import wepy from '@wepy/core';
+
+wepy.page({
+  config: {},
+
+  hooks: {},
+
+  data: {
+    listP: [],
+    divide: '../static/divide.jpg'
+  },
+  onLoad() {
+    this.getlistData();
+  },
+
+  computed: {},
+
+  methods: {
+    getlistData() {
+      let this_ = this;
+      const db = wx.cloud.database({
+        env: 'production-594426'
+      });
+      const listCollection = db.collection('yunhanshu1_articlelist');
+      listCollection
+        .where({})
+        .get()
+        .then(
+          res => {
+            this_.listP = res.data;
+          },
+          err => {
+            console.log('err', err);
+          }
+        );
+    },
+
+    godetail(e) {
+      let articleid = e.currentTarget.dataset.info.articleid;
+      this.$navigate({ url: `/pages/article?articleid=${articleid}` });
+    },
+
+    callme() {
+      wx.makePhoneCall({
+        phoneNumber: '18101380205'
+      });
+    }
+  },
+
+  created() {}
+});
+</script>
+<config>
+{}
+</config>

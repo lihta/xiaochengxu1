@@ -1,16 +1,17 @@
 {
-	"miniprogramRoot": "miniprogram/",
-	"cloudfunctionRoot": "cloudfunctions/",
+	"description": "A WePY project",
 	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"postcss": true,
-		"minified": true,
-		"newFeature": true
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true,
+		"nodeModules": false
 	},
+	"compileType": "miniprogram",
 	"appid": "wxbccae1eebe351b14",
-	"projectname": "yunkaifa",
-	"libVersion": "2.2.5",
+	"projectname": "wepy1",
+	"miniprogramRoot": "weapp/",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -28,24 +29,24 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
-					"name": "db guide",
-					"pathName": "pages/home/index",
+					"name": "home",
+					"pathName": "pages/popular",
 					"query": ""
 				},
 				{
 					"id": 1,
-					"name": "art1",
-					"pathName": "pages/article/index",
-					"query": ""
+					"name": "rticle",
+					"pathName": "pages/article",
+					"query": "articleid=1"
 				},
 				{
-					"id": 2,
-					"name": "index",
-					"pathName": "pages/index/index",
+					"id": -1,
+					"name": "home",
+					"pathName": "pages/mine",
 					"query": ""
 				}
 			]
