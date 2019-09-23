@@ -114,7 +114,7 @@ page {
       <swiper indicator-dots="true" autoplay="true" circular="true" interval="3500" class="swiper">
         <block wx:for="{{imgUrls}}" wx:key="index">
           <swiper-item>
-            <img src="{{item}}" class="slide-image" style="width: 750rpx; height: 400rpx;">
+            <img src="{{item}}" class="slide-image" style="width: 750rpx; height: 400rpx;"/>
           </swiper-item>
         </block>
       </swiper>
@@ -129,7 +129,7 @@ page {
     </div>
     <div class="divide">
       <div class="tit">- 热门话题 -</div>
-      <img src="{{divide}}" class="img"/>
+      <img src="{{divide}}" class="img">
     </div>
     <div class="content">
       <div
@@ -169,38 +169,41 @@ wepy.page({
     iconList: [
       {
         url: '../static/icon/111.jpg',
-        title: '轮胎',
+        title: '实用技巧',
         articleid: 4
       },
       {
         url: '../static/icon/112.jpg',
-        title: '保养',
+        title: '保养绝招',
         articleid: 1
       },
       {
         url: '../static/icon/113.jpg',
-        title: '维修',
+        title: '维修窍门',
         articleid: 2
       },
       {
         url: '../static/icon/116.jpg',
-        title: '充电',
+        title: '新能源',
         articleid: 5
       },
       {
         url: '../static/icon/117.jpg',
-        title: '救援',
+        title: '时事政策',
         articleid: 6
       }
     ],
     divide: '../static/divide.jpg'
   },
 
-  onLoad() {
+  onLoad(params) {
     const app = getApp();
     const db = wx.cloud.database();
     this.getlistData();
     let self = this;
+    if (params.pagetype === 'article') {
+      this.$navigate({ url: `/pages/article?articleid=${params.articleid}` });
+    }
     wx.cloud.callFunction({
       name: 'login',
       data: {},
@@ -229,7 +232,6 @@ wepy.page({
         .get()
         .then(
           res => {
-            console.log(1111111111111, res);
             this_.listP = res.data;
           },
           err => {
@@ -243,11 +245,9 @@ wepy.page({
       this.$navigate({ url: `/pages/article?articleid=${articleid}` });
     },
     gopopular() {
-      console.log(7777);
       wx.switchTab({
         url: `/pages/popular`
       });
-      //this.$switchTab({ url: `/pages/popular` });
     }
   },
 

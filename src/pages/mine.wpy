@@ -117,36 +117,32 @@
 </style>
 
 <template>
-    <div class="page-box">
-        <view class="userinfo">
-            <img src="{{avatarUrl}}" class="userinfo-avatar"/>
-            <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo" class="btn">
-                <div class="userinfo-nickname">{{nickName}}</div>
-            </button>
-        </view>
-        <view class="contact" wx:if="{{userInfo}}">您可以发送邮件联系我们
-            <br>lihta@foxmail.com
-        </view>
-        <view class="contact" wx:else>我们需要获取您的昵称
-            <br>才能显示联系方式
-            <br>您可以点击上面的“用户名”来进行授权
-        </view>
-        <div class="mask" wx:if="{{showModel}}">
-            <div class="layer">
-                <div class="title">我们需要获取您的昵称
-                    <br>才能显示联系方式
-                </div>
-                <div class="btns">
-                    <button bindtap="close" class="left btn">拒绝</button>
-                    <button
-                        open-type="getUserInfo"
-                        bindgetuserinfo="onGetUserInfo"
-                        class="right btn"
-                    >好的</button>
-                </div>
-            </div>
+  <div class="page-box">
+    <view class="userinfo">
+      <img src="{{avatarUrl}}" class="userinfo-avatar"/>
+      <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo" class="btn">
+        <div class="userinfo-nickname">{{nickName}}</div>
+      </button>
+    </view>
+    <view class="contact" wx:if="{{userInfo}}">您可以发送邮件联系我们
+      <br>lihta@foxmail.com
+    </view>
+    <view class="contact" wx:else>我们需要获取您的昵称
+      <br>才能显示联系方式
+      <br>您可以点击上面的“用户名”来进行授权
+    </view>
+    <div class="mask" wx:if="{{showModel}}">
+      <div class="layer">
+        <div class="title">我们需要获取您的昵称
+          <br>才能显示联系方式
         </div>
+        <div class="btns">
+          <button bindtap="close" class="left btn">拒绝</button>
+          <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo" class="right btn">好的</button>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
  
 <script>
@@ -156,13 +152,22 @@ wepy.page({
   data: {
     avatarUrl: '../static/user-unlogin.png',
     nickName: '用户名',
-    userInfo: app.$wepy.$options.globalData.userInfo,
+    userInfo: '',
     showModel: false
   },
 
   onLoad() {
-    if (!this.useInfo) {
+    let userInfo = wx.getStorageSync('userInfo');
+    userInfo = userInfo
+      ? JSON.parse(userInfo)
+      : app.$wepy.$options.globalData.userInfo;
+    if (!userInfo) {
       this.showModel = 1;
+    } else {
+      this.userInfo = userInfo;
+      this.avatarUrl = userInfo.avatarUrl;
+      this.nickName = userInfo.nickName;
+      app.$wepy.$options.globalData.userInfo = userInfo;
     }
   },
 
@@ -171,7 +176,11 @@ wepy.page({
   methods: {
     onGetUserInfo: function(e) {
       let userInfo = e.$wx.detail.userInfo;
-      if (e.$wx.detail.userInfo) {
+      if (userInfo) {
+        wx.setStorage({
+          key: 'userInfo',
+          data: JSON.stringify(userInfo)
+        });
         this.avatarUrl = userInfo.avatarUrl;
         this.nickName = userInfo.nickName;
         this.userInfo = userInfo;

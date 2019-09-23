@@ -6,7 +6,7 @@ page {
   justify-content: flex-start;
 }
 .container {
-  padding-bottom: 100rpx;
+  padding-bottom: 200rpx;
 }
 .title {
   font-size: 44rpx;
@@ -36,20 +36,56 @@ page {
   margin: 10rpx;
   padding: 10rpx;
 }
+
+.bottom-share {
+  width: 100vw;
+  height: 150rpx;
+  box-shadow: 5rpx 5rpx 5rpx 5rpx;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .txt {
+    text-align: center;
+    padding-left: 30rpx;
+    font-size: 30rpx;
+    color: #888;
+  }
+  .btn {
+    background: #b4e1e4;
+    height: 80rpx;
+    border-radius: 40rpx;
+    width: 250rpx;
+    border: 0;
+    line-height: 80rpx;
+    &:after {
+      border: 0;
+    }
+  }
+}
 </style>
 
 <template>
-    <view class="container">
-        <view class="title">{{title}}</view>
-        <view class="content">
-            <view class="section" wx:for="{{listP}}" wx:key="{{index}}">
-                <view class="des-p">{{item.des}}</view>
-                <view class="des-img" wx:if="{{item.img}}">
-                    <img src="{{item.img}}"/>
-                </view>
-            </view>
+  <view class="container">
+    <view class="title">{{title}}</view>
+    <view class="content">
+      <view class="section" wx:for="{{listP}}" wx:key="{{index}}">
+        <view class="des-p">{{item.des}}</view>
+        <view class="des-img" wx:if="{{item.img}}">
+          <img src="{{item.img}}">
         </view>
+      </view>
     </view>
+    <div class="bottom-share">
+      <view class="txt">如果觉得内容不错，
+        <br>可以分享给朋友来看看哦～
+      </view>
+      <button open-type="share" class="btn">分享</button>
+    </div>
+  </view>
 </template>
 <script>
 import wepy from '@wepy/core';
@@ -61,9 +97,16 @@ wepy.page({
   },
   onLoad(params) {
     this.getDetailInfo(params.articleid);
+    this.articleid = params.articleid;
   },
 
   computed: {},
+
+  onShareAppMessage(ops) {
+    return {
+      path: `/pages/index?pagetype=article&articleid=${this.articleid}`
+    };
+  },
 
   methods: {
     getDetailInfo(articleid) {
