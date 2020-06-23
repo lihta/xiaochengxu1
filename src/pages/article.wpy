@@ -79,16 +79,16 @@ page {
         </view>
       </view>
     </view>
-    <div class="bottom-share">
+    <!-- <div class="bottom-share">
       <view class="txt">如果觉得内容不错，
         <br>可以分享给朋友来看看哦～
       </view>
       <button open-type="share" class="btn">分享</button>
-    </div>
+    </div> -->
   </view>
 </template>
 <script>
-import wepy from '@wepy/core';
+import wepy from '@wepy/core'
 
 wepy.page({
   data: {
@@ -96,8 +96,8 @@ wepy.page({
     title: ''
   },
   onLoad(params) {
-    this.getDetailInfo(params.articleid);
-    this.articleid = params.articleid;
+    this.getDetailInfo(params.articleid)
+    this.articleid = params.articleid
   },
 
   computed: {},
@@ -105,35 +105,35 @@ wepy.page({
   onShareAppMessage(ops) {
     return {
       path: `/pages/index?pagetype=article&articleid=${this.articleid}`
-    };
+    }
   },
 
   methods: {
     getDetailInfo(articleid) {
       const db = wx.cloud.database({
         env: 'production-594426'
-      });
-      const listCollection = db.collection('yunhanshi1_articledetail');
+      })
+      const listCollection = db.collection('yunhanshi1_articledetail')
       listCollection
         .where({ articleid })
         .get()
         .then(
           res => {
-            let info = res.data[0];
-            let { title } = info;
-            let listP = JSON.parse(info.listP);
-            this.listP = listP;
-            this.title = title;
+            let info = res.data[0]
+            let { title } = info
+            let listP = JSON.parse(info.listP)
+            this.listP = listP
+            this.title = title
           },
           err => {
-            console.log('err', err);
+            console.log('err', err)
           }
-        );
+        )
     }
   },
 
   created() {}
-});
+})
 </script>
 <config>
 {}
