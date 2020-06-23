@@ -52,6 +52,11 @@
     text-align: left;
   }
 }
+.contact-btn{
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+}
 
 .contact {
   margin-top: 40rpx;
@@ -124,13 +129,19 @@
         <div class="userinfo-nickname">{{nickName}}</div>
       </button>
     </view>
-    <view class="contact" wx:if="{{userInfo}}">您可以发送邮件联系我们
+    <view class="contact-btn">
+       <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo" class="btn">
+        联系我们
+      </button>
+    </view>
+
+    <!-- <view class="contact" wx:if="{{userInfo}}">您可以发送邮件联系我们
       <br>lihta@foxmail.com
     </view>
     <view class="contact" wx:else>我们需要获取您的昵称
       <br>才能显示联系方式
       <br>您可以点击上面的“用户名”来进行授权
-    </view>
+    </view> -->
     <div class="mask" wx:if="{{showModel}}">
       <div class="layer">
         <div class="title">我们需要获取您的昵称
@@ -144,10 +155,10 @@
     </div>
   </div>
 </template>
- 
+
 <script>
-import wepy from '@wepy/core';
-let app = getApp();
+import wepy from '@wepy/core'
+let app = getApp()
 wepy.page({
   data: {
     avatarUrl: '../static/user-unlogin.png',
@@ -157,17 +168,15 @@ wepy.page({
   },
 
   onLoad() {
-    let userInfo = wx.getStorageSync('userInfo');
+    let userInfo = wx.getStorageSync('userInfo')
     userInfo = userInfo
       ? JSON.parse(userInfo)
-      : app.$wepy.$options.globalData.userInfo;
-    if (!userInfo) {
-      this.showModel = 1;
-    } else {
-      this.userInfo = userInfo;
-      this.avatarUrl = userInfo.avatarUrl;
-      this.nickName = userInfo.nickName;
-      app.$wepy.$options.globalData.userInfo = userInfo;
+      : app.$wepy.$options.globalData.userInfo
+    if (userInfo) {
+      this.userInfo = userInfo
+      this.avatarUrl = userInfo.avatarUrl
+      this.nickName = userInfo.nickName
+      app.$wepy.$options.globalData.userInfo = userInfo
     }
   },
 
@@ -175,29 +184,29 @@ wepy.page({
 
   methods: {
     onGetUserInfo: function(e) {
-      let userInfo = e.$wx.detail.userInfo;
+      let userInfo = e.$wx.detail.userInfo
       if (userInfo) {
         wx.setStorage({
           key: 'userInfo',
           data: JSON.stringify(userInfo)
-        });
-        this.avatarUrl = userInfo.avatarUrl;
-        this.nickName = userInfo.nickName;
-        this.userInfo = userInfo;
-        this.showModel = 0;
-        app.$wepy.$options.globalData.userInfo = userInfo;
+        })
+        this.avatarUrl = userInfo.avatarUrl
+        this.nickName = userInfo.nickName
+        this.userInfo = userInfo
+        this.showModel = 0
+        app.$wepy.$options.globalData.userInfo = userInfo
       }
     },
     close() {
-      this.showModel = 0;
+      this.showModel = 0
     }
   },
 
   created() {}
-});
+})
 </script>
 <config>
 {
-  
+
 }
 </config>
